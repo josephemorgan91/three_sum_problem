@@ -128,10 +128,20 @@ public class BST{
 	
 	/* This is for the preorder traversal */
 	public String preorderToString(){
-		// TODO: Remove when complete
-		return null;	// Placeholder to prevent Java error; remove when complete
+	    String ret = "[";
+	    return ret;
 	}
-	
+
+	public Queue<Integer> preOrderToStringHelper (Node root) {
+		LinkedList<Integer> q = new LinkedList<Integer>();
+		if (root == null)
+			return q;
+		q.add(root.key);
+		q.addAll(preOrderToStringHelper(root.left));
+		q.addAll(preOrderToStringHelper(root.right));
+		return q;
+	}
+
 	/* This is for the postorder traversal */
 	public String postorderToString(){
 		// TODO: Remove when complete
