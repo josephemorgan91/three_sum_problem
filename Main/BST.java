@@ -129,28 +129,73 @@ public class BST{
 	/* This is for the preorder traversal */
 	public String preorderToString(){
 	    String ret = "[";
+	    Queue<Integer> preorderQ = preorderToStringHelper(root);
+	    while (!preorderQ.isEmpty())
+	    	ret += preorderQ.remove() + ",";
+	    ret = ret.substring(0, ret.length() - 1);
+	    ret += "]";
 	    return ret;
 	}
 
-	public Queue<Integer> preOrderToStringHelper (Node root) {
-		LinkedList<Integer> q = new LinkedList<Integer>();
+	public Queue<Integer> preorderToStringHelper (Node root) {
+		LinkedList<Integer> preorderQ = new LinkedList<Integer>();
+
 		if (root == null)
 			return q;
-		q.add(root.key);
-		q.addAll(preOrderToStringHelper(root.left));
-		q.addAll(preOrderToStringHelper(root.right));
-		return q;
+
+		preorderQ.add(root.key);
+		if (root.left != null)
+			preorderQ.addAll(preorderToStringHelper(root.left));
+		if (root.right != null)
+			preorderQ.addAll(preorderToStringHelper(root.right));
+		return preorderQ;
 	}
 
 	/* This is for the postorder traversal */
 	public String postorderToString(){
-		// TODO: Remove when complete
-		return null;	// Placeholder to prevent Java error; remove when complete
+	    String ret = "[";
+	    Queue<Integer> postorderQ = postorderToStringHelper(root);
+		while (!postorderQ.isEmpty())
+			ret += postorderQ.remove() + ",";
+		ret = ret.substring(0, ret.length() - 1);
+		ret += "]";
+		return ret;
+	}
+
+	public Queue<Integer> postorderToStringHelper(Node root) {
+		LinkedList<Integer> postorderQ = new LinkedList<Integer>();
+
+		if (root == null)
+			return q;
+
+		if (root.left != null)
+			postorderQ.addAll(postorderToStringHelper(root.left));
+		if (root.right != null)
+			postorderQ.addAll(postorderToStringHelper(root.right));
+		postorderQ.add(root.key);
+		return postorderQ;
 	}
 	
 	/* This is for the level order (BFS) */
 	public String levelorderToString(){
-		// TODO: Remove when complete
-		return null;	// Placeholder to prevent Java error; remove when complete
+		// Add all nodes from each level to queue before we go down a level and add children
+		String ret = new String("[");
+		Queue<Node> nodes = new LinkedList<Node>();
+	    nodes.add(root);
+
+	    while (!nodes.isEmpty()) {
+	    	Node temp = nodes.remove();
+	    	ret += temp.key + ",";
+
+	    	if (temp.left != null) {
+	    		nodes.add(temp.left);
+			}
+	    	if (temp.right != null) {
+	    		nodes.add(temp.right);
+			}
+		}
+		ret = ret.substring(0, ret.length() - 1);
+		ret += "]";
+	    return ret;
 	}
 }

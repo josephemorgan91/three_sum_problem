@@ -1,2 +1,4 @@
 **/i3/.i3/config
 .idea/
+out/
+*.iml
