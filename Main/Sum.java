@@ -17,26 +17,4 @@ public class Sum{
 		}
 		return null;
 	}
-
-	public static int[] threeSumQuadratic(int[] a, int sum){
-		int x, y, z, start, end;
-		Sort.MergeSort(a);
-		for (int i = 0; i < a.length - 1; ++i) {
-		    x = a[i];
-		    start = i + 1;
-		    end = a.length - 1;
-		    while (start < end) {
-		    	y = a[start];
-		    	z = a[end];
-		    	if ((x + y + z) == sum) {
-		    	    return new int[] {x, y, z};
-				} else if ((x + y + z) > sum) {
-		    		--end;
-				} else {
-		    		++start;
-				}
-			}
-		}
-		return null;
-	}
 }
