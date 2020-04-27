@@ -1,8 +1,6 @@
 package Main;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Graph{
 	// Fields
@@ -89,6 +87,30 @@ public class Graph{
 			ret[i] = al.get(i);
 		return ret;
 	}
+
+	private int[] BFStoArray(int v, boolean weighted) {
+		ArrayList<Integer> al = new ArrayList<>();
+		boolean[] visited = new boolean[this.v];
+		Queue<Integer> q = new LinkedList<>();
+		q.add(v);
+		visited[v] = true;
+
+		int visit;
+		while(!q.isEmpty()){
+			visit = q.remove();
+			al.add(visit);
+			for(int i = 0; i < this.v; i++){
+				if(isAdjacent(visit, i, weighted) && !visited[i]){
+					q.add(i);
+					visited[i] = true;
+				}
+			}
+		}
+		int[] ret = new int[al.size()];
+		for(int i = 0; i < ret.length; i++)
+			ret[i] = al.get(i);
+		return ret;
+	}
 	
 	public String BFS(int v){
 		String ret = "BFS for Vert #" + v + ": ";
@@ -119,11 +141,99 @@ public class Graph{
 	
 	/* This is for adding weighted edges */
 	public void addWeightedEdge(int v1, int v2, int weight){
-		// TODO: Remove when complete
+	    g[v1][v2] = weight;
+	    g[v2][v1] = weight;
 	}
 	
 	public String shortestPath(int v1, int v2){
-		// TODO: Remove when complete
-		return null;	// Placeholder to prevent Java error; remove when complete
+	    Stack<Integer> shortestPath;
+	    ShortestPathTable spt = new ShortestPathTable(this, v1);
+	    spt.needToVisit.set(v1, false);
+	    spt.distance.set(v1, 0);
+	    getShortestPathTable(v1, spt);
+	    shortestPath = getPath(v1, v2, spt);
+
+	    String ret = "[";
+	    while (!shortestPath.empty()) {
+	    	ret += shortestPath.pop(). toString() + ",";
+		}
+		ret = ret.substring(0, ret.length() - 1);
+		ret += "]";
+		return ret;
+	}
+
+	private void getShortestPathTable(int rootVertex, ShortestPathTable spt) {
+	    for (int neighborVertex = 0; neighborVertex < v; ++neighborVertex) {
+	        if (isAdjacent(neighborVertex, rootVertex, true)) {
+	        	int distanceToNeighborNode = spt.distance.get(rootVertex) + g[rootVertex][neighborVertex];
+	        	if (distanceToNeighborNode < spt.distance.get(neighborVertex)) {
+	        	    spt.distance.set(neighborVertex, distanceToNeighborNode);
+	        	    spt.previousVertex.set(neighborVertex, rootVertex);
+				}
+			}
+		}
+		if (spt.needToVisit.contains(true)) {
+			int nextVertexToVisit = getNearestVertex(spt);
+			spt.needToVisit.set(nextVertexToVisit, false);
+			getShortestPathTable(nextVertexToVisit, spt);
+		}
+	}
+
+	private boolean isAdjacent(int v1, int v2, boolean isWeighted) {
+		if (isWeighted) {
+			if (g[v1][v2] >= 1) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return isAdjacent(v1, v2);
+		}
+	}
+
+	private int getNearestVertex(ShortestPathTable spt) {
+		int shortestDistance = Integer.MAX_VALUE;
+		int nearestVertex = -1;
+
+	    for (int i = 0; i < v; ++i) {
+	        if (spt.needToVisit.get(i) && spt.distance.get(i) < shortestDistance) {
+	        	nearestVertex = i;
+				shortestDistance = spt.distance.get(i);
+			}
+		}
+	    return nearestVertex;
+	}
+
+	private Stack<Integer> getPath(int v1, int v2, ShortestPathTable spt) {
+		Stack<Integer> ret = new Stack<>();
+		int nextVertex = v2;
+		ret.push(nextVertex);
+		while (nextVertex != v1) {
+			nextVertex = spt.previousVertex.get(nextVertex);
+			ret.push(nextVertex);
+		}
+		return ret;
+	}
+
+	private class ShortestPathTable {
+	    public ArrayList<Integer> distance;
+		public ArrayList<Boolean> needToVisit;
+		public ArrayList<Integer> previousVertex;
+
+	    public ShortestPathTable(Graph g, int startingVertex) {
+			distance = new ArrayList<>();
+			needToVisit = new ArrayList<>();
+			previousVertex = new ArrayList<>();
+
+			for (int i = 0; i < g.v; ++i) {
+				distance.add(Integer.MAX_VALUE);
+				needToVisit.add(false);
+				previousVertex.add(-1);
+			}
+
+			for (int i : g.BFStoArray(startingVertex, true)) {
+				needToVisit.set(i, true);
+			}
+		}
 	}
 }

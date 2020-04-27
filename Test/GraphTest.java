@@ -24,36 +24,9 @@ class GraphTest {
     }
 
     @Test
-    void v() {
-    }
-
-    @Test
-    void e() {
-    }
-
-    @Test
-    void addEdge() {
-    }
-
-    @Test
-    void isAdjacent() {
-    }
-
-    @Test
-    void isConnected() {
-    }
-
-    @Test
-    void adj() {
-    }
-
-    @Test
-    void adjString() {
-    }
-
-    @Test
     void BFS() {
         assertEquals("BFS for Vert #1: 1 2 3 4 5 6 7 8 9 10 11 ", g.BFS(1));
+        Graph t = new Graph(9);
     }
 
     @Test
@@ -67,5 +40,18 @@ class GraphTest {
 
     @Test
     void shortestPath() {
+        g.addWeightedEdge(1,4,32);
+        g.addWeightedEdge(1, 2, 3);
+        g.addWeightedEdge(1, 3, 4);
+        g.addWeightedEdge(2, 5, 7);
+        g.addWeightedEdge(4, 5, 9);
+        g.addWeightedEdge(5, 6, 45);
+        g.addWeightedEdge(5, 7, 3);
+        g.addWeightedEdge(6, 8, 12);
+        g.addWeightedEdge(6, 9, 15);
+        g.addWeightedEdge(7, 10, 2);
+        g.addWeightedEdge(10, 11, 2);
+        g.addWeightedEdge(9, 11, 1);
+        assertEquals(g.shortestPath(1, 11), "[1,2,5,7,10,11]");
     }
 }

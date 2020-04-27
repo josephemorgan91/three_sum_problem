@@ -22,7 +22,7 @@ class SortTest {
     void mergeSort_2() {
         Random rand = new Random();
         int arrayLen;
-        for (int i = 0; i < 10000; ++i) {
+        for (int i = 0; i < 100; ++i) {
             arrayLen = rand.nextInt(10000);
             int[] arrayToSort = new int[arrayLen];
             for (int j = 0; j < arrayLen; ++j) {
